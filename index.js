@@ -1,16 +1,25 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const cors = require('cors');
+require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 5000 ;
 
 //Middleware
-app.use(cors());
+const corsOptions = {
+  origin: '*',
+  credentials: true,
+  optionSuccessStatus: 200,
+}
+app.use(cors(corsOptions))
 app.use(express.json());
+app.use(bodyParser.json());
 
-//from gmail: merndevelpler@gmail.com
+//from gmail: merndevelpler@gmail.com  firebase: EcommerceProjectAirCNC
 
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = "mongodb+srv://ecommerceWebsite:Ecommerce1200Dhaka@cluster0.9bn6hyg.mongodb.net/?retryWrites=true&w=majority";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -47,6 +56,13 @@ async function run() {
       const result = await roomsCollection.find().toArray();
       res.send(result)
     })
+    app.post('/rooms', async(req, res) => {
+      const newProduct = req.body;
+      
+      const result = await roomsCollection.insertOne(newProduct);
+      res.send(result)
+    })
+   
  
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
