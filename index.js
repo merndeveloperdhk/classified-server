@@ -17,10 +17,11 @@ app.use(bodyParser.json());
 
 //from gmail: merndevelpler@gmail.com  firebase: EcommerceProjectAirCNC
 
+/*  console.log(process.env.DB_USER);
+console.log(process.env.DB_PASSWORD);  */
 
-
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
-const uri = "mongodb+srv://ecommerceWebsite:Ecommerce1200Dhaka@cluster0.9bn6hyg.mongodb.net/?retryWrites=true&w=majority";
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.9bn6hyg.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
