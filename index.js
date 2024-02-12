@@ -36,9 +36,24 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
-
+    const usersCollection = client.db('ecommerce').collection('users')
     const allProductsCollection = client.db('ecommerce').collection('allProducts');
     const roomsCollection = client.db('ecommerce').collection('rooms');
+    const bookingsCollection = client.db("ecommerce").collection('bookings')
+
+    //Save user email and role in dB
+    app.put('/users/:email', async(req, res) =>{
+      const email = req.params.email;
+      const user = req.body;
+      const query = {email: email};
+      const options = {upsert: true};
+      const updateDoc = {
+        $set: user,
+      }
+      const result = await usersCollection.updateOne(query,updateDoc, options );
+      console.log("From users put", result);
+      res.send(result)
+    })
 
     //Get aoo products
     app.get('/allProducts', async(req, res)=>{
@@ -59,7 +74,6 @@ async function run() {
     })
     app.post('/rooms', async(req, res) => {
       const newProduct = req.body;
-      
       const result = await roomsCollection.insertOne(newProduct);
       res.send(result)
     })
